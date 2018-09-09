@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import net.utils.FilePath;
 import net.utils.PropertiesReader;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -84,13 +85,17 @@ public class AppConfig {
         return adapter;
     }
 
-    @Bean
+  /*  @Bean
     public JpaTransactionManager jpaTransactionManager(){
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
         jpaTransactionManager.setEntityManagerFactory(entityManagerFactory(dataSource(),jpaVendorAdapter()).getObject());
         return jpaTransactionManager;
-    }
+    }*/
 
+    @Bean
+    public PlatformTransactionManager txManager(){
+        return new JpaTransactionManager(entityManagerFactory(dataSource(),jpaVendorAdapter()).getObject());
+    }
     @Bean
     public PersistenceAnnotationBeanPostProcessor paPostProcessor(){
         return new PersistenceAnnotationBeanPostProcessor();

@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
+@Transactional
 public class UsersDAOImpl implements UsersDAO {
 
     @PersistenceContext
@@ -37,19 +38,16 @@ public class UsersDAOImpl implements UsersDAO {
     }
 
     @Override
-    @Transactional
     public void addUser(User user) {
         em.persist(user);
     }
 
     @Override
-    @Transactional
     public void upDateUser(User user) {
         em.merge(user);
     }
 
     @Override
-    @Transactional
     public void deleteUser(long id) {
         User user =  em.find(User.class, id);
         em.remove(user);

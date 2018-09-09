@@ -54,7 +54,6 @@ public class AppConfig {
     public DataSource dataSource(){
 
         Properties properties = PropertiesReader.getProperties(FilePath.CONNECTION_PROPERTIES);
-
         BasicDataSource source = new BasicDataSource();
         source.setDriverClassName(properties.getProperty("DB_CLASS_NAME"));
         source.setUrl(properties.getProperty("DB_CONNECTION_STRING"));
@@ -70,7 +69,8 @@ public class AppConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-        entityManagerFactoryBean.setPackagesToScan("net.model");
+        entityManagerFactoryBean.setPackagesToScan(new String[]{"net.model"});
+
         return entityManagerFactoryBean;
     }
 
@@ -81,8 +81,14 @@ public class AppConfig {
         adapter.setShowSql(true);
         adapter.setGenerateDdl(false);
         adapter.setDatabasePlatform("org.hibernate.dialect.MySQLDialect");
-
         return adapter;
+    }
+
+    @Bean
+    public JpaTransactionManager jpaTransactionManager(){
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+        jpaTransactionManager.setEntityManagerFactory(entityManagerFactory(dataSource(),jpaVendorAdapter()).getObject());
+        return jpaTransactionManager;
     }
 
     @Bean

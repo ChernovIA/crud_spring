@@ -3,11 +3,14 @@ package net.service;
 import net.dao.userDAO.UsersDAO;
 import net.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
+@DependsOn("serviceHelper")
 public class UserServiceImp implements UserService {
 
     private UsersDAO usersDAO;
@@ -39,5 +42,10 @@ public class UserServiceImp implements UserService {
 
     public List<User> getUsersDataTable() {
         return usersDAO.getTable();
+    }
+
+    @PostConstruct
+    public void createUsers(){
+        ServiceHelper.addTestUsers();
     }
 }

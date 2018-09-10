@@ -1,6 +1,7 @@
 package net.service;
 
 import net.dao.userDAO.UsersDAO;
+import net.model.Roles;
 import net.model.User;
 
 import java.util.List;

@@ -14,5 +14,26 @@
 <body>
     <p style="text-align: center;">Something was wrong!</p>
     <p style="text-align: center;">Server sad: <c:out value="${result.desc}"/></p>
+
+
+
+    </p><select multiple = "true" name="roles">
+        <c:forEach items="${roles}" var="role">
+            <option
+                    <c:if test="${role.value == true}"> selected = "selected" </c:if>
+                    value="<c:out value="${role.key}"/>"><c:out value="${role.key}"/>
+            </option>
+        </c:forEach>
+    </select></p>
+
+
+</p><form:select multiple = "true" name="roles" class="form-Control">
+    <c:forEach items="${roles}" var="role">
+        <option
+                <c:if test="${role.value == true}"> selected = "selected" </c:if>
+                value="<c:out value="${role.key}"/>"><c:out value="${role.key}"/>
+        </option>
+    </c:forEach>
+    /></p>
 </body>
 </html>

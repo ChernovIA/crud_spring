@@ -2,11 +2,11 @@ package net.dao.userDAO;
 
 import net.model.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -21,7 +21,6 @@ public class UsersDAOImpl implements UsersDAO {
         return em.find(User.class, id);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public User get(String login) {
         TypedQuery<User> tq = em.createQuery("FROM User WHERE login = ?1",User.class);
@@ -30,11 +29,10 @@ public class UsersDAOImpl implements UsersDAO {
         return user;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<User> getTable() {
         em.clear();
-        return em.createQuery("from User",User.class).getResultList();
+        return em.createQuery("FROM User",User.class).getResultList();
     }
 
     @Override

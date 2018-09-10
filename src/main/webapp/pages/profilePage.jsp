@@ -13,7 +13,7 @@
             <th scope="col" style="text-align: left;"><p>Hi! <b>${sessionScope.user.name}</b></p></th>
             <th scope="col" style="text-align: left;">
 
-                <c:if test="${sessionScope.user.role == Roles.ADMIN}">
+                <c:if test="${sessionScope.user.roles == Roles.ADMIN}">
                     <p><form action="<%=ServletURL.ServletUserControl%>" method="post">
                     <p align="right"><input type="submit" value="User list"></p>
                     </form></p>

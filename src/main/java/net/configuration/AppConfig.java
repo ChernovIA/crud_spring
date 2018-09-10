@@ -1,18 +1,16 @@
 package net.configuration;
 
-import net.service.UserService;
-import net.service.UserServiceImp;
+
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.hibernate.boot.model.relational.Database;
-import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import net.utils.FilePath;
-import net.utils.PropertiesReader;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -23,24 +21,23 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.SharedCacheMode;
-import javax.persistence.ValidationMode;
-import javax.persistence.spi.ClassTransformer;
-import javax.persistence.spi.PersistenceUnitInfo;
-import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URL;
-import java.util.*;
+import java.util.Properties;
+
 
 @Configuration
 @ComponentScan(basePackages = {"net"})
 @EnableTransactionManagement
 @EnableWebMvc
-public class AppConfig {
+@PropertySource("classpath:connection.properties")
+public class AppConfig implements EnvironmentAware {
+
+    private Environment env;
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.env = environment;
+    }
 
     @Bean
     public InternalResourceViewResolver internalResourceViewResolver(){
@@ -54,12 +51,11 @@ public class AppConfig {
     @Bean
     public DataSource dataSource(){
 
-        Properties properties = PropertiesReader.getProperties(FilePath.CONNECTION_PROPERTIES);
         BasicDataSource source = new BasicDataSource();
-        source.setDriverClassName(properties.getProperty("DB_CLASS_NAME"));
-        source.setUrl(properties.getProperty("DB_CONNECTION_STRING"));
-        source.setUsername(properties.getProperty("USER"));
-        source.setPassword(properties.getProperty("PASS"));
+        source.setDriverClassName(env.getRequiredProperty("db.class.name"));
+        source.setUrl(env.getRequiredProperty("db.connection.string"));
+        source.setUsername(env.getRequiredProperty("user"));
+        source.setPassword(env.getRequiredProperty("pass"));
 
         return source;
     }
@@ -72,6 +68,7 @@ public class AppConfig {
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
         entityManagerFactoryBean.setPackagesToScan(new String[]{"net.model"});
 
+        entityManagerFactoryBean.setJpaProperties(hibernateProperties());
         return entityManagerFactoryBean;
     }
 
@@ -79,31 +76,24 @@ public class AppConfig {
     public JpaVendorAdapter jpaVendorAdapter(){
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(org.springframework.orm.jpa.vendor.Database.MYSQL);
-        adapter.setShowSql(true);
-        adapter.setGenerateDdl(false);
-        adapter.setDatabasePlatform("org.hibernate.dialect.MySQLDialect");
         return adapter;
     }
 
-  /*  @Bean
+    @Bean
     public JpaTransactionManager jpaTransactionManager(){
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
         jpaTransactionManager.setEntityManagerFactory(entityManagerFactory(dataSource(),jpaVendorAdapter()).getObject());
         return jpaTransactionManager;
-    }*/
-
-    @Bean
-    public PlatformTransactionManager txManager(){
-        return new JpaTransactionManager(entityManagerFactory(dataSource(),jpaVendorAdapter()).getObject());
-    }
-    @Bean
-    public PersistenceAnnotationBeanPostProcessor paPostProcessor(){
-        return new PersistenceAnnotationBeanPostProcessor();
     }
 
-    @Bean
-    public BeanPostProcessor persistenceTranslation(){
-        return new PersistenceExceptionTranslationPostProcessor();
+    final Properties hibernateProperties() {
+        final Properties hibernateProperties = new Properties();
+
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hbm2ddl"));
+        hibernateProperties.setProperty("hibernate.dialect", env.getProperty("dialect"));
+        hibernateProperties.setProperty("hibernate.show_sql", env.getProperty("showsql"));
+
+        return hibernateProperties;
     }
 
     /*

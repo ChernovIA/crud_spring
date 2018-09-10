@@ -1,9 +1,11 @@
 package net.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 public class User {
 
     @Id
@@ -17,41 +19,40 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Override
-    public String toString() {
-        return getLogin()   + " - "
-                + getRole() + " : "
-                + getName() + " - "
-                + getPassword();
-    }
-
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private Set<Roles> roles = new HashSet<>();
 
     public User(){
 
     }
     public User(String login, String password) {
-        this(0,login,password,login, Roles.USER);
+        this(0,login,password,login, null);
     }
 
     public User(String login, String password, String name) {
-        this(0,login,password, name, Roles.USER);
+        this(0,login,password, name, null);
     }
 
-    public User(String login, String password, String name, String role) {
-        this(0,login,password, name, role);
+    public User(String login, String password, String name, Set<Roles> roles) {
+        this(0,login,password, name, roles);
     }
 
-    public User(long id, String login, String password, String name, String role) {
+    public User(long id, String login, String password, String name, Set<Roles> roles) {
+        Set<Roles> newRoles = roles;
+        if (newRoles == null) {
+            newRoles = new HashSet<>();
+            newRoles.add(new Roles());
+        }
+
         this.id = id;
         this.login = login;
         this.password = password;
         this.name = name;
-        this.role = role;
+        this.roles = newRoles;
     }
 
     public String getName() {
@@ -86,11 +87,18 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Roles> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Roles> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return getLogin()   + " - "
+                + getName() + " - "
+                + getPassword();
     }
 }

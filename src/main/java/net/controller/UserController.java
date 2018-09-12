@@ -1,25 +1,15 @@
 package net.controller;
 
-import net.model.Roles;
-import net.model.RolesTypes;
 import net.model.User;
 import net.service.RolesService;
 import net.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@SessionAttributes("roles")
 public class UserController {
 
     private UserService userService;
@@ -31,11 +21,11 @@ public class UserController {
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String welcomePage() {
-        return "redirect:/usersList";
+        return "redirect:/profile";
     }
 
-    @RequestMapping(value = "/usersList", method = RequestMethod.GET)
-    public String listUserList(Model model) {
+    @RequestMapping(value = "/administrator/usersList", method = RequestMethod.GET)
+    public String listUserListGet(Model model) {
 
         model.addAttribute("users", userService.getUsersDataTable());
 
@@ -43,7 +33,16 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/administrator/usersList", method = RequestMethod.POST)
+    public String listUserListPost(Model model) {
+
+        model.addAttribute("users", userService.getUsersDataTable());
+
+        return "usersList";
+
+    }
+
+    @RequestMapping(value = "/administrator/addUser", method = RequestMethod.GET)
     public String addUserGet(Model model) {
 
         model.addAttribute(new User());
@@ -53,25 +52,25 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/administrator/addUser", method = RequestMethod.POST)
     public String addUserPost(@ModelAttribute("user") User user, @RequestParam("userRoles") String[] userRoles) {
 
         RolesService.setUserRoles(user, userRoles);
         userService.addUser(user);
 
-        return "redirect:/usersList";
+        return "redirect:/administrator/usersList";
 
     }
 
-    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/administrator/deleteUser", method = RequestMethod.GET)
     public String deleteUser(@RequestParam("id") int id) {
 
         userService.deleteUser(id);
-        return "redirect:/usersList";
+        return "redirect:/administrator/usersList";
 
     }
 
-    @RequestMapping(value = "/editUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/administrator/editUser", method = RequestMethod.GET)
     public String editUser(@RequestParam("id") int id, Model model) {
 
         User user = userService.getUser(id);
@@ -82,20 +81,20 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/editUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/administrator/editUser", method = RequestMethod.POST)
     public String editUser(@ModelAttribute("user") User user, @RequestParam("userRoles") String[] userRoles) {
 
         RolesService.setUserRoles(user, userRoles);
         userService.upDateUser(user);
 
-        return "redirect:/usersList";
+        return "redirect:/administrator/usersList";
 
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile() {
 
-        return "redirect:/usersList";
+        return "profilePage";
 
     }
 

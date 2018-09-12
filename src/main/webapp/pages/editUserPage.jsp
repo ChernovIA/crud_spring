@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <form style="align-content: center" action="/editUser" method="POST">
+    <form style="align-content: center" action="/administrator/editUser" method="POST">
 
         <p>ID: <input name="id" type="text" readonly="readonly" value="<c:out value="${user.id}" />" /></p>
         <p>Login: <input name="login" type="text" readonly = "readonly" value="<c:out value="${user.login}" />" /></p>
@@ -31,7 +31,7 @@
             </c:forEach>
         </select>
         </p>
-
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <p><input type="submit" value="save user"/></p>
 
     </form>

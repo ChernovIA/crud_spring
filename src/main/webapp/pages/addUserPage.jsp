@@ -7,7 +7,7 @@
     <title>add user</title>
 </head>
 <body>
-    <form style="align-content: center" action="/addUser" method="POST">
+    <form style="align-content: center" action="/administrator/addUser" method="POST">
 
 
         <p>Login: <input name="login" type="text" /></p>
@@ -29,6 +29,7 @@
             </c:forEach>
         </select>
     </p>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <p><input type="submit" value="add user" /></p>
 
     </form>

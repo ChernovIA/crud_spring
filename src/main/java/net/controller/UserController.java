@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private UserService userService;
+    private final RolesService rolesService;
 
     @Autowired
-    public void setUserServiceImp(UserService userService) {
+    public UserController(RolesService rolesService, UserService userService) {
+        this.rolesService = rolesService;
         this.userService = userService;
     }
 
@@ -46,7 +48,7 @@ public class UserController {
     public String addUserGet(Model model) {
 
         model.addAttribute(new User());
-        model.addAttribute("roles",RolesService.getAllRoles());
+        model.addAttribute("roles",rolesService.getAllRoles());
 
         return "addUserPage";
 
@@ -55,7 +57,7 @@ public class UserController {
     @RequestMapping(value = "/administrator/addUser", method = RequestMethod.POST)
     public String addUserPost(@ModelAttribute("user") User user, @RequestParam("userRoles") String[] userRoles) {
 
-        RolesService.setUserRoles(user, userRoles);
+        rolesService.setUserRoles(user, userRoles);
         userService.addUser(user);
 
         return "redirect:/administrator/usersList";
@@ -75,7 +77,7 @@ public class UserController {
 
         User user = userService.getUser(id);
         model.addAttribute("user", user);
-        model.addAttribute("roles",RolesService.getAllRoles(user));
+        model.addAttribute("roles",rolesService.getAllRoles(user));
 
         return "editUserPage";
 
@@ -84,7 +86,7 @@ public class UserController {
     @RequestMapping(value = "/administrator/editUser", method = RequestMethod.POST)
     public String editUser(@ModelAttribute("user") User user, @RequestParam("userRoles") String[] userRoles) {
 
-        RolesService.setUserRoles(user, userRoles);
+        rolesService.setUserRoles(user, userRoles);
         userService.upDateUser(user);
 
         return "redirect:/administrator/usersList";

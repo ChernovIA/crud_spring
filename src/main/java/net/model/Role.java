@@ -1,10 +1,12 @@
 package net.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "ROLES")
-public class Roles {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -15,7 +17,7 @@ public class Roles {
     @Enumerated(value = EnumType.STRING)
     private RolesTypes type = RolesTypes.USER;
 
-    public Roles(){
+    public Role(){
 
     }
 
@@ -33,5 +35,10 @@ public class Roles {
 
     public void setType(RolesTypes type) {
         this.type = type;
+    }
+
+    @Override
+    public String getAuthority() {
+        return "ROLE_"+getType().name();
     }
 }

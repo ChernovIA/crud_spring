@@ -1,7 +1,7 @@
 package net.service;
 
 import net.dao.userDAO.UsersDAO;
-import net.model.Roles;
+import net.model.Role;
 import net.model.RolesTypes;
 import net.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,8 @@ public class ServiceHelper {
     }
     public static void addTestUsers()  {
 
-        Set<Roles> roles = new HashSet<>();
-        Roles admin = new Roles();
+        Set<Role> roles = new HashSet<>();
+        Role admin = new Role();
         admin.setType(RolesTypes.ADMIN);
         roles.add(admin);
 

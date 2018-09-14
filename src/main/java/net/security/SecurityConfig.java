@@ -1,4 +1,4 @@
-package net.configuration;
+package net.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

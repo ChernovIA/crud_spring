@@ -1,4 +1,4 @@
-package net.configuration;
+package net.security;
 
 import net.model.User;
 import net.service.UserService;

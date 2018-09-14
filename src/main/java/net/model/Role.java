@@ -21,6 +21,10 @@ public class Role implements GrantedAuthority {
 
     }
 
+    public Role(RolesTypes type){
+        this.type = type;
+    }
+
     public long getId() {
         return id;
     }

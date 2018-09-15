@@ -1,25 +1,27 @@
 package net.service;
 
-import net.dao.userDAO.UsersDAO;
 import net.model.Role;
 import net.model.RolesTypes;
 import net.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
 public class ServiceHelper {
 
-    private static UsersDAO usersDAO;
+    private UserService userService;
 
     @Autowired
-    public void setUsersDAO(UsersDAO usersDAO){
-        ServiceHelper.usersDAO = usersDAO;
+    public ServiceHelper(UserService userService) {
+        this.userService = userService;
     }
-    public static void addTestUsers()  {
+
+
+    public void addTestUsers()  {
 
         Set<Role> roles = new HashSet<>();
         Role admin = new Role();
@@ -30,9 +32,13 @@ public class ServiceHelper {
         User uds2 = new User("Moderator", "mod");
         User uds3 = new User("JavaProger", "java");
 
-        usersDAO.addUser(uds1);
-        usersDAO.addUser(uds2);
-        usersDAO.addUser(uds3);
+        userService.addUser(uds1);
+        userService.addUser(uds2);
+        userService.addUser(uds3);
     }
 
+    @PostConstruct
+    public void createUsers(){
+        addTestUsers();
+    }
 }

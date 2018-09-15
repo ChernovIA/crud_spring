@@ -3,17 +3,22 @@ package net.service;
 import net.dao.userDAO.UsersDAO;
 import net.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
-@DependsOn("serviceHelper")
 public class UserServiceImp implements UserService {
 
     private UsersDAO usersDAO;
+
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     public void setUsersDAO(UsersDAO usersDAO) {
@@ -29,6 +34,7 @@ public class UserServiceImp implements UserService {
     }
 
     public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         usersDAO.addUser(user);
     }
 
@@ -37,6 +43,10 @@ public class UserServiceImp implements UserService {
     }
 
     public void upDateUser(User user) {
+        User current = usersDAO.get(user.getId());
+        if (!current.getPassword().equals(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         usersDAO.upDateUser(user);
     }
 
@@ -44,8 +54,4 @@ public class UserServiceImp implements UserService {
         return usersDAO.getTable();
     }
 
-    @PostConstruct
-    public void createUsers(){
-        ServiceHelper.addTestUsers();
-    }
 }

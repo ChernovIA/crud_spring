@@ -11,7 +11,7 @@
 
         <p>ID: <input name="id" type="text" readonly="readonly" value="<c:out value="${user.id}" />" /></p>
         <p>Login: <input name="login" type="text" readonly = "readonly" value="<c:out value="${user.login}" />" /></p>
-        <p>Password: <input name="password" type="text" value="<c:out value="${user.password}" />" /></p>
+        <p>Password: <input name="password" type="password" value="<c:out value="${user.password}" />" /></p>
 
         <p>Name: <input name="name" type="text" value="<c:out value="${user.name}" />"  /></p>
 

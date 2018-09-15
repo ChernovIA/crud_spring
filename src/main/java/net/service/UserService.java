@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface UserService {
 
-    void setUsersDAO(UsersDAO usersDAO);
-
     User getUser(long id);
 
     User getUser(String login);

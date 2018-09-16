@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>edit user</title>
+</head>
+<body>
+
+<form style="align-content: center" th:action="@{/administrator/editUser}" method="POST">
+
+    <p>ID: <input name="id" type="text" readonly="readonly" th:value="${user.id}" />" /></p>
+    <p>Login: <input name="login" type="text" readonly = "readonly" th:value="${user.login}" />" /></p>
+    <p>Password: <input name="password" type="password" th:value="${user.password}" />" /></p>
+
+    <p>Name: <input name="name" type="text" th:value="${user.name}" />"  /></p>
+
+    <p>Roles:</p>
+
+    </p>
+    <select multiple = "true" name="userRoles">
+        <option th:each="role:${roles}"
+            th:value="${role.key}"
+            th:selected="${role.value}"
+            th:utext="${role.key}">
+        </option>
+    </select>
+    </p>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <p><input type="submit" value="save user"/></p>
+
+</form>
+
+</body>
+</html>

@@ -42,6 +42,33 @@ public class Role implements GrantedAuthority {
     }
 
     @Override
+    public int hashCode() {
+        return getType().name().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null){
+            return false;
+        }
+
+        if (obj == this){
+            return true;
+        }
+
+        if (!(obj instanceof Role)){
+            return false;
+        }
+
+        if (this.type == ((Role)obj).type){
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public String getAuthority() {
         return "ROLE_"+getType().name();
     }

@@ -13,6 +13,7 @@ import java.util.Set;
 @Component
 public class RolesServiceImp implements RolesService{
 
+    @Override
     public Map<String, Boolean> getAllRoles(){
         Map<String, Boolean> map = new HashMap<>();
         for(RolesTypes rolesType : RolesTypes.values()){
@@ -22,6 +23,7 @@ public class RolesServiceImp implements RolesService{
         return map;
     }
 
+    @Override
     public Map<String, Boolean> getAllRoles(User user){
         Map<String, Boolean> map = getAllRoles();
 
@@ -32,6 +34,16 @@ public class RolesServiceImp implements RolesService{
         return map;
     }
 
+    @Override
+    public Map<User, Map<String, Boolean>> getAllRolesAllUsers(Iterable<User> users) {
+        Map<User, Map<String, Boolean>> userMap = new HashMap<>();
+        for(User user: users){
+            userMap.put(user, getAllRoles(user));
+        }
+        return userMap;
+    }
+
+    @Override
     public void setUserRoles(User user, String[] userRoles){
         Set<Role> roleSet = new HashSet<>();
         for(String userRole: userRoles){

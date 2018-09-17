@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@SessionAttributes("roles")
+//@SessionAttributes("roles")
 public class UserController {
 
     private UserService userService;
@@ -21,40 +21,44 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    @GetMapping(value = {"/"})
     public String welcomePage() {
         return "redirect:/profile";
     }
 
-    @RequestMapping(value = "/administrator/usersList", method = RequestMethod.GET)
+    @GetMapping(value = "/administrator/usersList")
     public String listUserListGet(Model model) {
 
-        model.addAttribute("users", userService.getUsersDataTable());
-
-        return "usersList";
-
-    }
-
-    @RequestMapping(value = "/administrator/usersList", method = RequestMethod.POST)
-    public String listUserListPost(Model model) {
-
-        model.addAttribute("users", userService.getUsersDataTable());
-
-        return "usersList";
-
-    }
-
-    @RequestMapping(value = "/administrator/addUser", method = RequestMethod.GET)
-    public String addUserGet(Model model) {
-
-        model.addAttribute(new User());
+        Iterable<User> users = userService.getUsersDataTable();
+        model.addAttribute("users", users);
+        model.addAttribute("user", new User());
         model.addAttribute("roles",rolesService.getAllRoles());
+        model.addAttribute("usersRoles",rolesService.getAllRolesAllUsers(users));
 
-        return "addUserPage";
+        return "usersList";
 
     }
 
-    @RequestMapping(value = "/administrator/addUser", method = RequestMethod.POST)
+//    @RequestMapping(value = "/administrator/usersList", method = RequestMethod.POST)
+//    public String listUserListPost(Model model) {
+//
+//        model.addAttribute("users", userService.getUsersDataTable());
+//
+//        return "usersList";
+//
+//    }
+
+//    @RequestMapping(value = "/administrator/addUser", method = RequestMethod.GET)
+//    public String addUserGet(Model model) {
+//
+//        model.addAttribute(new User());
+//        model.addAttribute("roles",rolesService.getAllRoles());
+//
+//        return "addUserPage";
+//
+//    }
+
+    @PostMapping(value = "/administrator/addUser")
     public String addUserPost(@ModelAttribute("user") User user, @RequestParam("userRoles") String[] userRoles) {
 
         rolesService.setUserRoles(user, userRoles);
@@ -72,15 +76,19 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/administrator/editUser", method = RequestMethod.GET)
-    public String editUser(@RequestParam("id") int id, Model model) {
-
-        User user = userService.getUser(id);
-        model.addAttribute("user", user);
-        model.addAttribute("roles",rolesService.getAllRoles(user));
-
-        return "editUserPage";
-
+//    @RequestMapping(value = "/administrator/editUser", method = RequestMethod.GET)
+//    public String editUser(@RequestParam("id") int id, Model model) {
+//
+//        User user = userService.getUser(id);
+//        model.addAttribute("user", user);
+//        model.addAttribute("roles",rolesService.getAllRoles(user));
+//
+//        return "editUserPage";
+//
+//    }
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
     @RequestMapping(value = "/administrator/editUser", method = RequestMethod.POST)

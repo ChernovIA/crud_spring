@@ -1,0 +1,30 @@
+spring.datasource:
+  platform:
+  driverClassName: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/UserDataBase?autoReconnect=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+  username: sa
+  password: saPass
+spring.jpa:
+  database: mysql
+  hibernate.ddl-auto: create-drop
+  show-sql: true
+
+  #properties:
+  #  "dialect" : "org.hibernate.dialect.MySQLDialect"
+
+
+spring:
+  thymeleaf:
+    # cache: false
+    # check-template: true
+    # check-template-location: true
+    # content-type: text/html
+    # enabled: true
+    # encoding: UTF-8
+    #excluded-view-names:
+    #mode: HTML
+    #prefix: templates/
+    #suffix: .html
+
+    # template-resolver-order:
+    # view-names:

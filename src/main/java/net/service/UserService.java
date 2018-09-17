@@ -1,9 +1,7 @@
 package net.service;
 
-import net.dao.userDAO.UsersDAO;
 import net.model.User;
 
-import java.util.List;
 
 public interface UserService {
 
@@ -17,5 +15,5 @@ public interface UserService {
 
     void upDateUser(User user);
 
-    List<User> getUsersDataTable();
+    Iterable<User> getUsersDataTable();
 }

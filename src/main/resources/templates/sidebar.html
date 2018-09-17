@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <nav th:fragment="sidebar" class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/administrator/usersList}">
+                            Admin
+                        </a>
+                    </li>
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/profile}">
+                        Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html>

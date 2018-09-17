@@ -1,57 +1,54 @@
 package net.service;
 
-import net.dao.userDAO.UsersDAO;
+import net.dao.userDAO.UserRepository;
 import net.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class UserServiceImp implements UserService {
 
-    private UsersDAO usersDAO;
+    private UserRepository repository;
 
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    public void setRepository(UserRepository repository) {
+        this.repository = repository;
+    }
+    @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
-
-    @Autowired
-    public void setUsersDAO(UsersDAO usersDAO) {
-        this.usersDAO = usersDAO;
-    }
-
     public User getUser(long id) {
-        return usersDAO.get(id);
+        return repository.findOne(id);
     }
 
     public User getUser(String login) {
-        return usersDAO.get(login);
+        return repository.findByLogin(login);
     }
 
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        usersDAO.addUser(user);
+        repository.save(user);
     }
 
     public void deleteUser(long id) {
-        usersDAO.deleteUser(id);
+        repository.delete(id);
     }
 
     public void upDateUser(User user) {
-        User current = usersDAO.get(user.getId());
+        User current = getUser(user.getId());
         if (!current.getPassword().equals(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        usersDAO.upDateUser(user);
+        repository.save(user);
     }
 
-    public List<User> getUsersDataTable() {
-        return usersDAO.getTable();
+    public Iterable<User> getUsersDataTable() {
+        //return repository.findByRole(RolesTypes.USER);
+        return repository.findAll();
     }
 
 }

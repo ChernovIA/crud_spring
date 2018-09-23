@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-//@SessionAttributes("roles")
 public class UserController {
 
     private UserService userService;
@@ -39,25 +38,6 @@ public class UserController {
 
     }
 
-//    @RequestMapping(value = "/administrator/usersList", method = RequestMethod.POST)
-//    public String listUserListPost(Model model) {
-//
-//        model.addAttribute("users", userService.getUsersDataTable());
-//
-//        return "usersList";
-//
-//    }
-
-//    @RequestMapping(value = "/administrator/addUser", method = RequestMethod.GET)
-//    public String addUserGet(Model model) {
-//
-//        model.addAttribute(new User());
-//        model.addAttribute("roles",rolesService.getAllRoles());
-//
-//        return "addUserPage";
-//
-//    }
-
     @PostMapping(value = "/administrator/addUser")
     public String addUserPost(@ModelAttribute("user") User user, @RequestParam("userRoles") String[] userRoles) {
 
@@ -76,16 +56,6 @@ public class UserController {
 
     }
 
-//    @RequestMapping(value = "/administrator/editUser", method = RequestMethod.GET)
-//    public String editUser(@RequestParam("id") int id, Model model) {
-//
-//        User user = userService.getUser(id);
-//        model.addAttribute("user", user);
-//        model.addAttribute("roles",rolesService.getAllRoles(user));
-//
-//        return "editUserPage";
-//
-//    }
     @GetMapping("/login")
     public String login() {
         return "login";

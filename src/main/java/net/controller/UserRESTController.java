@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/users")
 public class UserRESTController {
 
     private final UserService userService;
@@ -17,26 +17,26 @@ public class UserRESTController {
         this.userService = userService;
     }
 
-    @GetMapping("usersList")
+    @GetMapping("all")
     public Iterable<User> getUsers(){
 
         return userService.getUsersDataTable();
     }
 
-    @GetMapping("user/{id}")
+    @GetMapping("{id}")
     public User getUsers(@PathVariable("id") long id){
 
         return userService.getUser(id);
     }
 
-    @PostMapping("user")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody User user){
         userService.addUser(user);
         return user;
     }
 
-    @PutMapping("user/{id}")
+    @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable("id") long id, @RequestBody User user){
         User userBase = userService.getUser(id);
@@ -54,7 +54,7 @@ public class UserRESTController {
         userService.upDateUser(userBase);
     }
 
-    @DeleteMapping("user/{id}")
+    @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deUser(@PathVariable long id){
         userService.deleteUser(id);

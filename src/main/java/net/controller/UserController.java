@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping(value = {"/"})
     public String welcomePage() {
-        return "redirect:/profile";
+        return "redirect:/login";
     }
 
     @GetMapping(value = "/administrator/usersList")

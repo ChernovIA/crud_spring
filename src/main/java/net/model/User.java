@@ -1,5 +1,7 @@
 package net.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -28,6 +30,7 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonInclude()
     private Set<Role> roles = new HashSet<>();
 
     public User(){
@@ -121,6 +124,7 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    //@JsonIgnore
     public Set<Role> getRoles() {
         return roles;
     }

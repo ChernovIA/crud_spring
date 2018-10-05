@@ -9,4 +9,6 @@ public interface UserRepository extends CrudRepository<User,Long>, UserRepositor
 
     @Override
     Iterable<User> findByRole(RolesTypes role);
+
+
 }

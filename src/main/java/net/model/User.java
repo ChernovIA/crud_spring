@@ -1,6 +1,5 @@
 package net.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -81,7 +80,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return name;
     }
 
     @Override
